@@ -1,0 +1,7 @@
+We start with an id
+Example ID:50
+
+We want to store 8 booleans in a byte to save space.
+To find the row we use ID/8 and to find the index of the byte we use ID%8 to get the remiander.
+* NOTE after we get the remainder we need to use reverse indexing to go from last to first index.
+We do this by using (7-remainder)
