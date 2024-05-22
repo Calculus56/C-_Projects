@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
+using System.Runtime.InteropServices;
+using Globals;
 
 namespace BooleanFlags
 {
     public class Driver
     {
         public static void Main(string[] args){
-            var list_bools = new ListOfBools();
-            int id = 50;
             // Converting a bool to byte.
             // bool f = true;
             // byte bf = Convert.ToByte(f);
@@ -23,35 +23,34 @@ namespace BooleanFlags
             // PrintByte(dec1);
 
             // Random Booleans
-            Console.WriteLine("Random bools");
-            var dec2 = BoolToByte(list_bools.RandomBools());
-            PrintByte(dec2);
+            // Console.WriteLine("Random bools");
+            // var dec2 = BoolToByte(list_bools.RandomBools());
+            // PrintByte(dec2);
+            var obj = new object[]{};
+            Timing.RunMethodAndStopWatch(new Driver(), obj, "RunBooleanFlag");
         }
 
-        static void PrintByte(byte bf){
-            Console.WriteLine($"{ByteToString(bf)}");
-        }
-
-        static string ByteToString(byte bf){
-            var bool_byte = new StringBuilder();
-            // Reading the byte from back to front. Since the bool is stored at index 7.
-            for (int i = 7; i >= 0; i--)
-            {
-                int bit = (bf >> i) & 1;
-                bool_byte.Append(bit);
-                // Console.WriteLine($"Bit {i}: {bit}");
-            }
-            return bool_byte.ToString();
-        }
-
-        static byte BoolToByte(bool[] bools){
-            byte dec = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                // Console.WriteLine(bools[i] ? (byte)Math.Pow(2, i) : (byte)0);
-                dec += bools[i] ? (byte)Math.Pow(2, i) : (byte)0;
-            }
-            return dec;
+        public void RunBooleanFlag(){
+            var list_bools = new ListOfBools();
+            
+            Console.WriteLine("Changing bools");
+            // Total is column * 8
+            const int columns = 8;
+            int id = new Random().Next(1, columns * 8);
+            var tb_bools = list_bools.GenerateBoolTable(columns);
+            System.Console.WriteLine(sizeof(bool) * tb_bools.Length * 8);
+            list_bools.PrintBoolTable(tb_bools);
+            var arr_bools = list_bools.ConvertTableToByteArr(tb_bools);
+            System.Console.WriteLine(sizeof(byte) * arr_bools.Length);
+            list_bools.PrintBytes(arr_bools);
+            
+            list_bools.ChangeBool(arr_bools, id);
+            // for (int id = 1; id < columns * 8; id++)
+            // {
+            //     var arr_bools = list_bools.ConvertTableToByteArr(tb_bools);
+            //     tb_bools = list_bools.ChangeBool(arr_bools, id);
+            //     // list_bools.PrintBoolTable(tb_bools);
+            // }
         }
     }
 }
